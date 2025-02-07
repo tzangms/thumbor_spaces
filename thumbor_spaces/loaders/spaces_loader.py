@@ -3,7 +3,7 @@ from datetime import datetime
 from os.path import join, exists, abspath
 
 from six.moves.urllib.parse import unquote
-from tornado.concurrent import return_future
+from tornado import gen
 
 from thumbor.loaders import http_loader
 from thumbor.loaders import LoaderResult
@@ -14,8 +14,8 @@ import boto3
 from botocore.client import Config
 
 
-@return_future
-def load(context, path, callback):
+@gen.coroutine
+def load(context, path):
     logger.debug("INSIDE SPACES LOADER")
     logger.debug(path)
     logger.debug(context.request.url)
@@ -23,7 +23,8 @@ def load(context, path, callback):
     chker2 = '/'+context.config.SPACES_LOADER_FOLDER+'/'
     if chker1 not in context.request.url and chker2 not in context.request.url:
         logger.debug(path)
-        http_loader.load(context, path, callback)
+        result = yield http_loader.load(context, path)
+        raise gen.Return(result)
     else:
         key = get_key_name(context, context.request.url)
         session = boto3.session.Session()
@@ -38,9 +39,8 @@ def load(context, path, callback):
                                                     'Key': key
                                                 }, ExpiresIn=300)
         logger.debug(url)
-        def noop(url):
-            return url
-        http_loader.load_sync(context, url, callback, normalize_url_func=noop)
+        result = yield http_loader.load(context, url)
+        raise gen.Return(result)
 
 def get_key_name(context, path):
     path_segments = path.lstrip('/').split("/")

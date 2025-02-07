@@ -1,6 +1,6 @@
 import os
 from os.path import exists
-from tornado.concurrent import return_future
+from tornado import gen
 
 from thumbor.loaders import LoaderResult
 from thumbor.engines import BaseEngine

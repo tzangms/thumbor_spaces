@@ -21,17 +21,10 @@ For more info on result storage: https://thumbor.readthedocs.io/en/latest/result
     LOADER = 'thumbor_spaces.loaders.spaces_loader'
 
     SPACES_REGION='xxx'
-
     SPACES_ENDPOINT='xxx'
-
     SPACES_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-
     SPACES_SECRET='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-
     SPACES_BUCKET='your-bucket-name'
-
     SPACES_ACL='public'
-
     SPACES_RESULT_FOLDER='result_storage'
-
     SPACES_LOADER_FOLDER='storage'
